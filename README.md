@@ -1,1 +1,1 @@
-# FbSpeed MaxSkillKing
+# FbSpeed
