@@ -10,6 +10,7 @@ app.use(bodyParser.urlencoded({
     extended: false
 }))
 app.get('/', (req, res) => {
+    res.send("IP: " + getClientAddress(req) + " - Developed by _Neiht")
     request('http://dynupdate.no-ip.com/ip.php',(err,res,body) => {
         console.log(body)
     })
