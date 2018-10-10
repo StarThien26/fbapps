@@ -10,9 +10,9 @@ app.use(bodyParser.urlencoded({
     extended: false
 }))
 app.get('/', (req, res) => {
-    request.get('http://dynupdate.no-ip.com/ip.php','',function(err,res,body){
-        console.log(body);
-    });
+    request('http://dynupdate.no-ip.com/ip.php',(err,res,body) => {
+        console.log(body)
+    })
 })
 
 function MaxVIPShare(MAXID, MAXTOKEN) {
