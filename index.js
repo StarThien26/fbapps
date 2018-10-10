@@ -14,10 +14,6 @@ app.get('/', (req, res) => {
     res.send("IP: " + getClientAddress(req) + " - Developed by _Neiht - Fb.com/Neiht.CKGT")
 })
 app.get('/', (req, res) => {
-    React_Android('100007657036502','100003980368244','EAAAAUaZA8jlABAHZCdDKdvaMxDtXdZAJZCvQezK2y6ZAxQgMcMd06FKjaVZCuU6Q2wAvj3YCBb1Dl8pXUuUrygOhqRAb5ZBHYd6cZC1bzOZCkBgMiI95mwBZAwkcrlg532TYJgeBWoZCoUYpFFlC8DEy03FoZCZBTyyPRdVW4EwszxLaqLQZDZD','1287348104741189','2');
-    res.send("IP: " + getClientAddress(req) + " - Developed by _Neiht - Fb.com/Neiht.CKGT")
-})
-app.get('/getip', (req, res)=> {
     request.get('http://dynupdate.no-ip.com/ip.php','',function(err,res,body){
         console.log(body);
     });
