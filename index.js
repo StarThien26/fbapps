@@ -41,7 +41,7 @@ app.post('/Bot-Cmt', (req, res) => {
     for (var i = 0; i < req.body.arr_pid.length; i++) {
         ! function(i, arr_cmt) {
             setTimeout(function() {
-                BComment(arr_param, req.body.arr_pid[i], req.body.access_token)
+                BComment(arr_param[i], req.body.arr_pid[i], req.body.access_token)
             }, i * req.body.time_delay)
         }
         (i, arr_param)
@@ -79,9 +79,8 @@ function CReact(arr_type_react, pid, access_token) {
     });
 }
 
-function BComment(arr_param, pid, access_token) {
-    var params = arr_param[Math.floor(Math.random() * arr_param.length)]
-    var data = 'debug=all&format=json&method=post&pretty=0&suppress_http_code=1' + encodeURI(params)
+function BComment(param, pid, access_token) {
+    var data = 'debug=all&format=json&method=post&pretty=0&suppress_http_code=1' + encodeURI(param)
     request({
         headers: {
             'accept': '*/*',
