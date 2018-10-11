@@ -4,22 +4,101 @@ const app = express()
 const server = require('http').Server(app)
 const request = require('request')
 var log_access = []
-var ip_client = ['116.110.9.87', '14.232.213.61', '125.212.220.148', '42.112.30.39']
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
     extended: false
 }))
+
 app.get('/', (req, res) => {
-    res.send("IP: " + getClientAddress(req) + " - Developed by _Neiht")
-    request('http://dynupdate.no-ip.com/ip.php',(err,res,body) => {
-        console.log(body)
+    getipserver((body)=>{
+        res.send("IP Client: " + getClientAddress(req) + " - IP Server: " + body + " - Developed by _Neiht")
     })
 })
 
-function MaxVIPShare(MAXID, MAXTOKEN) {
-    request('https://graph.facebook.com/' + MAXID + '/sharedposts?method=post&access_token=' + MAXTOKEN, (error, response, body) => {
-        console.log(body)
+app.post('/Bot-React', (req, res) => {
+    var arr_type_react = req.body.arr_type_react
+    for (var i = 0; i < req.body.arr_pid.length; i++) {
+        ! function(i, arr_type_react) {
+            setTimeout(function() {
+                CReact(arr_type_react, req.body.arr_pid[i], req.body.access_token)
+            }, i * req.body.time_delay)
+        }
+        (i, arr_type_react)
+    }
+    res.json({
+        status: 200,
+        type: 'Bot React',
+        type_reaction: req.body.arr_type_react,
+        post_id: req.body.arr_pid,
+        total_post_id: req.body.arr_pid.length,
+        time_delay: req.body.time_delay,
+        developer: '_Neiht'
     })
+})
+
+app.post('/Bot-Cmt', (req, res) => {
+    var arr_param = req.body.arr_param
+    for (var i = 0; i < req.body.arr_pid.length; i++) {
+        ! function(i, arr_cmt) {
+            setTimeout(function() {
+                BComment(arr_param, req.body.arr_pid[i], req.body.access_token)
+            }, i * req.body.time_delay)
+        }
+        (i, arr_param)
+    }
+    res.json({
+        status: 200,
+        type: 'Bot Comment',
+        type_reaction: req.body.arr_type_react,
+        post_id: req.body.arr_pid,
+        total_post_id: req.body.arr_pid.length,
+        time_delay: req.body.time_delay,
+        developer: '_Neiht'
+    })
+})
+
+function CReact(arr_type_react, pid, access_token) {
+    var type_react = arr_type_react[Math.floor(Math.random() * arr_type_react.length)]
+    var data = 'debug=all&format=json&method=post&pretty=0&suppress_http_code=1&type=' + type_react
+    request({
+        headers: {
+            'accept': '*/*',
+            'accept-encoding': 'gzip, deflate, br',
+            'accept-language': 'vi-VN,vi;q=0.9,fr-FR;q=0.8,fr;q=0.7,en-US;q=0.6,en;q=0.5',
+            'content-type': 'application/x-www-form-urlencoded',
+            'origin': 'https://developers.facebook.com',
+            'referer': 'https://developers.facebook.com/',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36',
+            'content-length': data.length,
+        },
+        uri: 'https://graph.facebook.com/v3.1/' + pid + '/reactions?access_token=' + access_token,
+        body: data,
+        method: 'POST'
+    }, function(err, res, body) {
+        console.log(body);
+    });
+}
+
+function BComment(arr_param, pid, access_token) {
+    var params = arr_param[Math.floor(Math.random() * arr_param.length)]
+    var data = 'debug=all&format=json&method=post&pretty=0&suppress_http_code=1' + encodeURI(params)
+    request({
+        headers: {
+            'accept': '*/*',
+            'accept-encoding': 'gzip, deflate, br',
+            'accept-language': 'vi-VN,vi;q=0.9,fr-FR;q=0.8,fr;q=0.7,en-US;q=0.6,en;q=0.5',
+            'content-type': 'application/x-www-form-urlencoded',
+            'origin': 'https://developers.facebook.com',
+            'referer': 'https://developers.facebook.com/',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36',
+            'content-length': data.length,
+        },
+        uri: 'https://graph.facebook.com/v3.1/' + pid + '/comments?access_token=' + access_token,
+        body: data,
+        method: 'POST'
+    }, function(err, res, body) {
+        console.log(body);
+    });
 }
 
 function React_Android(my_uid, target_uid, token, post_id, camxuc) {
@@ -47,6 +126,12 @@ function React_Android(my_uid, target_uid, token, post_id, camxuc) {
     }, function(err, res, body) {
         console.log(body);
     });
+}
+
+function getipserver(callback){
+    request('http://dynupdate.no-ip.com/ip.php',(err,res,body) => {
+        callback(body)
+    })
 }
 
 function in_array(needle, haystack) {
