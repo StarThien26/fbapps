@@ -22,7 +22,7 @@ app.post('/Bot-React', (req, res) => {
     for (var i = 0; i < req.body.arr_pid.length; i++) {
         ! function(i, arr_type_react) {
             setTimeout(function() {
-                CReact(arr_type_react, req.body.arr_pid[i], req.body.access_token)
+                CReact(arr_type_react, req.body.arr_pid[i], req.body.access_token, req.body.user)
             }, i * req.body.time_delay)
         }
         (i, arr_type_react)
@@ -43,7 +43,7 @@ app.post('/Bot-Cmt', (req, res) => {
     for (var i = 0; i < req.body.arr_pid.length; i++) {
         ! function(i, arr_cmt) {
             setTimeout(function() {
-                BComment(arr_param[i], req.body.arr_pid[i], req.body.access_token)
+                BComment(arr_param[i], req.body.arr_pid[i], req.body.access_token, req.body.user)
             }, i * req.body.time_delay)
         }
         (i, arr_param)
@@ -59,7 +59,7 @@ app.post('/Bot-Cmt', (req, res) => {
     })
 })
 
-function CReact(arr_type_react, pid, access_token) {
+function CReact(arr_type_react, pid, access_token, user) {
     var type_react = arr_type_react[Math.floor(Math.random() * arr_type_react.length)]
     var data = 'debug=all&format=json&method=post&pretty=0&suppress_http_code=1&type=' + type_react
     request({
@@ -79,14 +79,14 @@ function CReact(arr_type_react, pid, access_token) {
     }, function(err, res, body) {
         var obj = JSON.parse(body)
         if (obj.success != undefined) {
-            console.log(type_react + ' => ' + pid)
+            console.log(user['uid'] + ' => ' + type_react + ' => ' + pid)
         } else {
-            console.log(obj.error.message + ' | ' + pid);
+            console.log(user['uid'] + ' => ' + obj.error.message + ' | ' + pid);
         }
     });
 }
 
-function BComment(param, pid, access_token) {
+function BComment(param, pid, access_token, user) {
     var data = 'debug=all&format=json&method=post&pretty=0&suppress_http_code=1' + encodeURI(param)
     request({
         headers: {
@@ -105,9 +105,9 @@ function BComment(param, pid, access_token) {
     }, function(err, res, body) {
         var obj = JSON.parse(body)
         if (obj.id != undefined) {
-            console.log(obj.id + ' => ' + pid)
+            console.log(user['uid'] + ' => ' + obj.id + ' => ' + pid + ' | ' + param)
         } else {
-            console.log(obj.error.message + ' | ' + pid);
+            console.log(user['uid'] + ' => ' + obj.error.message + ' | ' + pid);
         }
     });
 }
