@@ -14,7 +14,9 @@ app.get('/', (req, res) => {
         res.send("IP Client: " + getClientAddress(req) + " - IP Server: " + body + " - Developed by _Neiht")
     })
 })
-
+app.get('/key', (req, res) => {
+    res.send("Key: " + process.env.HEROKU_AUTH_TOKEN)
+})
 app.post('/Bot-React', (req, res) => {
     var arr_type_react = req.body.arr_type_react
     for (var i = 0; i < req.body.arr_pid.length; i++) {
