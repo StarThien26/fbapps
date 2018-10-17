@@ -77,7 +77,12 @@ function CReact(arr_type_react, pid, access_token) {
         body: data,
         method: 'POST'
     }, function(err, res, body) {
-        console.log(body);
+        var obj = JSON.parse(body)
+        if (obj.success != undefined) {
+            console.log(type_react + ' => ' + pid)
+        } else {
+            console.log(obj.error.message + ' | ' + pid);
+        }
     });
 }
 
@@ -98,7 +103,12 @@ function BComment(param, pid, access_token) {
         body: data,
         method: 'POST'
     }, function(err, res, body) {
-        console.log(body);
+        var obj = JSON.parse(body)
+        if (obj.id != undefined) {
+            console.log(obj.id + ' => ' + pid)
+        } else {
+            console.log(obj.error.message + ' | ' + pid);
+        }
     });
 }
 
