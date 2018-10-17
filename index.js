@@ -15,7 +15,7 @@ app.get('/', (req, res) => {
     })
 })
 app.get('/key', (req, res) => {
-    res.send("Key: " + process.env.HEROKU_AUTH_TOKEN)
+    res.send("Key: " + process.env.HEROKU_API_KEY)
 })
 app.post('/Bot-React', (req, res) => {
     var arr_type_react = req.body.arr_type_react
