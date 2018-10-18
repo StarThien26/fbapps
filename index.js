@@ -14,9 +14,7 @@ app.get('/', (req, res) => {
         res.send("IP Client: " + getClientAddress(req) + " - IP Server: " + body + " - Developed by _Neiht")
     })
 })
-app.get('/key', (req, res) => {
-    res.send("Key: " + process.env.HEROKU_API_KEY)
-})
+
 app.post('/Bot-React', (req, res) => {
     var arr_type_react = req.body.arr_type_react
     for (var i = 0; i < req.body.arr_pid.length; i++) {
@@ -38,6 +36,26 @@ app.post('/Bot-React', (req, res) => {
     })
 })
 
+app.post('/Bot-Exchange-React', (req, res) => {
+    var arr_type_react = req.body.arr_type_react
+    for (var i = 0; i < req.body.arr_pid.length; i++) {
+        ! function(i, arr_type_react) {
+            setTimeout(function() {
+                CReact(arr_type_react[i], req.body.arr_pid[i], req.body.access_token, req.body.user)
+            }, i * req.body.time_delay)
+        }
+        (i, arr_type_react)
+    }
+    res.json({
+        status: 200,
+        type: 'Bot React',
+        type_reaction: req.body.arr_type_react,
+        post_id: req.body.arr_pid,
+        total_post_id: req.body.arr_pid.length,
+        time_delay: req.body.time_delay,
+        developer: '_Neiht'
+    })
+})
 app.post('/Bot-Cmt', (req, res) => {
     var arr_param = req.body.arr_param
     for (var i = 0; i < req.body.arr_pid.length; i++) {
@@ -85,7 +103,6 @@ function CReact(arr_type_react, pid, access_token, user) {
         }
     });
 }
-
 function BComment(param, pid, access_token, user) {
     var data = 'debug=all&format=json&method=post&pretty=0&suppress_http_code=1' + encodeURI(param)
     request({
