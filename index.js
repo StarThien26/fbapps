@@ -61,10 +61,10 @@ app.post('/Bot-Cmt', (req, res) => {
     for (var i = 0; i < req.body.arr_pid.length; i++) {
         ! function(i, arr_cmt) {
             setTimeout(function() {
-                BComment(arr_param[i], req.body.arr_pid[i], req.body.access_token, req.body.user)
+                BComment(req.body.arr_param[i], req.body.arr_pid[i], req.body.access_token, req.body.user)
             }, i * req.body.time_delay)
         }
-        (i, arr_param)
+        (i)
     }
     res.json({
         status: 200,
