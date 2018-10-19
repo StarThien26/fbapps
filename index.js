@@ -120,12 +120,7 @@ function BComment(param, pid, access_token, user) {
         body: data,
         method: 'POST'
     }, function(err, res, body) {
-        var obj = JSON.parse(body)
-        if (obj.id != undefined) {
-            console.log(user['uid'] + ' => ' + obj.id + ' => ' + pid + ' | ' + param)
-        } else {
-            console.log(user['uid'] + ' => ' + obj.error.message + ' | ' + pid);
-        }
+        console.log(param,body)
     });
 }
 
