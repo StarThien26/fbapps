@@ -120,7 +120,7 @@ function BComment(param, pid, access_token, user) {
         body: data,
         method: 'POST'
     }, function(err, res, body) {
-        console.log(param,body)
+        console.log(param,pid,access_token,user)
     });
 }
 
