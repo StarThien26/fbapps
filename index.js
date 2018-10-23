@@ -36,15 +36,35 @@ app.post('/Bot-React', (req, res) => {
     })
 })
 
+app.post('/Bot-Exchange-React', (req, res) => {
+    var arr_type_react = req.body.arr_type_react
+    for (var i = 0; i < req.body.arr_pid.length; i++) {
+        ! function(i, arr_type_react) {
+            setTimeout(function() {
+                CReact(arr_type_react[i], req.body.arr_pid[i], req.body.access_token, req.body.user)
+            }, i * req.body.time_delay)
+        }
+        (i, arr_type_react)
+    }
+    res.json({
+        status: 200,
+        type: 'Bot React',
+        type_reaction: req.body.arr_type_react,
+        post_id: req.body.arr_pid,
+        total_post_id: req.body.arr_pid.length,
+        time_delay: req.body.time_delay,
+        developer: '_Neiht'
+    })
+})
 app.post('/Bot-Cmt', (req, res) => {
     var arr_param = req.body.arr_param
     for (var i = 0; i < req.body.arr_pid.length; i++) {
         ! function(i, arr_cmt) {
             setTimeout(function() {
-                BComment(arr_param[i], req.body.arr_pid[i], req.body.access_token, req.body.user)
+                BComment(req.body.arr_param[i], req.body.arr_pid[i], req.body.access_token, req.body.user)
             }, i * req.body.time_delay)
         }
-        (i, arr_param)
+        (i)
     }
     res.json({
         status: 200,
@@ -59,11 +79,30 @@ app.post('/Bot-Cmt', (req, res) => {
 
 function CReact(arr_type_react, pid, access_token, user) {
     var type_react = arr_type_react[Math.floor(Math.random() * arr_type_react.length)]
-    console.log('https://graph.facebook.com/v3.1/' + pid + '/reactions?access_token=' + access_token,user['uid'])
     var data = 'debug=all&format=json&method=post&pretty=0&suppress_http_code=1&type=' + type_react
-    
+    request({
+        headers: {
+            'accept': '*/*',
+            'accept-encoding': 'gzip, deflate, br',
+            'accept-language': 'vi-VN,vi;q=0.9,fr-FR;q=0.8,fr;q=0.7,en-US;q=0.6,en;q=0.5',
+            'content-type': 'application/x-www-form-urlencoded',
+            'origin': 'https://developers.facebook.com',
+            'referer': 'https://developers.facebook.com/',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36',
+            'content-length': data.length,
+        },
+        uri: 'https://graph.facebook.com/v3.1/' + pid + '/reactions?access_token=' + access_token,
+        body: data,
+        method: 'POST'
+    }, function(err, res, body) {
+        var obj = JSON.parse(body)
+        if (obj.success != undefined) {
+            console.log(user['uid'] + ' => ' + type_react + ' => ' + pid)
+        } else {
+            console.log(user['uid'] + ' => ' + obj.error.message + ' | ' + pid);
+        }
+    });
 }
-
 function BComment(param, pid, access_token, user) {
     var data = 'debug=all&format=json&method=post&pretty=0&suppress_http_code=1' + encodeURI(param)
     request({
