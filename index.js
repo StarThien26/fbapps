@@ -57,7 +57,6 @@ app.post('/Bot-Exchange-React', (req, res) => {
     })
 })
 app.post('/Bot-Cmt', (req, res) => {
-    var arr_param = req.body.arr_param
     for (var i = 0; i < req.body.arr_pid.length; i++) {
         ! function(i, arr_cmt) {
             setTimeout(function() {
@@ -69,7 +68,6 @@ app.post('/Bot-Cmt', (req, res) => {
     res.json({
         status: 200,
         type: 'Bot Comment',
-        type_reaction: req.body.arr_type_react,
         post_id: req.body.arr_pid,
         total_post_id: req.body.arr_pid.length,
         time_delay: req.body.time_delay,
@@ -104,7 +102,7 @@ function CReact(arr_type_react, pid, access_token, user) {
     });
 }
 function BComment(param, pid, access_token, user) {
-    var d = toObject(arr_param)
+    var d = toObject(param)
     request({
         headers: {
             'accept': '*/*',
