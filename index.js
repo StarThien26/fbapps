@@ -103,6 +103,7 @@ function CReact(arr_type_react, pid, access_token, user) {
 }
 function BComment(param, pid, access_token, user) {
     var d = toObject(param)
+    var c = JSON.stringify(d);
     request({
         headers: {
             'accept': '*/*',
@@ -112,9 +113,10 @@ function BComment(param, pid, access_token, user) {
             'origin': 'https://developers.facebook.com',
             'referer': 'https://developers.facebook.com/',
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36',
+            'content-length': c.length,
         },
         uri: 'https://graph.facebook.com/v3.1/' + pid + '/comments?access_token=' + access_token,
-        body: d,
+        qs: d,
         method: 'POST'
     }, function(err, res, body) {
         var stringify = JSON.stringify(body)
