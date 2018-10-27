@@ -112,17 +112,17 @@ function BComment(param, pid, access_token, user) {
             'origin': 'https://developers.facebook.com',
             'referer': 'https://developers.facebook.com/',
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36',
-            'content-length': Object.keys(d).length;,
         },
         uri: 'https://graph.facebook.com/v3.1/' + pid + '/comments?access_token=' + access_token,
         body: d,
         method: 'POST'
     }, function(err, res, body) {
+        var stringify = JSON.stringify(body)
         var obj = JSON.parse(body)
         if (obj.id != undefined) {
             console.log(user['uid'] + ' => ' + obj.id + ' => ' + pid + ' | ' + param)
         } else {
-            console.log(user['uid'] + ' => ' + obj.error.message + ' | ' + pid);
+            console.log(user['uid'] + ' => ' + obj.error.message + ' | ' + pid)
         }
     });
 }
