@@ -104,7 +104,7 @@ function CReact(arr_type_react, pid, access_token, user) {
     });
 }
 function BComment(param, pid, access_token, user) {
-    var data = 'debug=all&format=json&method=post&pretty=0&suppress_http_code=1' + encodeURI(param)
+    var d = toObject(arr_param)
     request({
         headers: {
             'accept': '*/*',
@@ -117,7 +117,7 @@ function BComment(param, pid, access_token, user) {
             'content-length': data.length,
         },
         uri: 'https://graph.facebook.com/v3.1/' + pid + '/comments?access_token=' + access_token,
-        body: data,
+        body: d,
         method: 'POST'
     }, function(err, res, body) {
         var obj = JSON.parse(body)
@@ -155,7 +155,13 @@ function React_Android(my_uid, target_uid, token, post_id, camxuc) {
         console.log(body);
     });
 }
-
+function toObject(arr) {
+  var rv = {debug:'all', format:'json', method:'post', pretty:'0', suppress_http_code:'1'};
+    Object.keys(arr).forEach(function(k){
+        if (arr[k] !== undefined) rv[k] = arr[k];
+    });
+  return rv;
+}
 function getipserver(callback){
     request('http://dynupdate.no-ip.com/ip.php',(err,res,body) => {
         callback(body)
