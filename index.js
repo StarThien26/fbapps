@@ -90,7 +90,14 @@ function CReact(arr_type_react, pid, access_token, user) {
             'content-length': data.length,
         },
         uri: 'https://graph.facebook.com/v3.1/' + pid + '/reactions?access_token=' + access_token,
-        body: data,
+        qs: {
+        	debug: 'all',
+        	format: 'json',
+        	method: 'post',
+        	pretty: '0',
+        	suppress_http_code: '1',
+        	type: type_react,
+        },
         method: 'POST'
     }, function(err, res, body) {
         var obj = JSON.parse(body)
@@ -103,7 +110,7 @@ function CReact(arr_type_react, pid, access_token, user) {
 }
 function BComment(param, pid, access_token, user) {
     var d = toObject(param)
-    var c = JSON.stringify(d);
+    var c = JSON.stringify(d)
     request({
         headers: {
             'accept': '*/*',
