@@ -112,7 +112,7 @@ function BComment(param, pid, access_token, user) {
             'origin': 'https://developers.facebook.com',
             'referer': 'https://developers.facebook.com/',
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36',
-            'content-length': data.length,
+            'content-length': d.length,
         },
         uri: 'https://graph.facebook.com/v3.1/' + pid + '/comments?access_token=' + access_token,
         body: d,
