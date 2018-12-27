@@ -1,31 +1,26 @@
 {
-  "name": "thien-dep-trai",
-  "version": "0.2.0",
-  "description": "Mark ML",
+  "name": "autolike-server",
+  "version": "1.1.2",
+  "description": "Node.js sample app for OpenShift 3",
   "main": "index.js",
-  "scripts": {
-    "start": "node index.js"
-  },
   "dependencies": {
-    "express": "^4.13.3",
-    "body-parser": "*"
   },
-  "engines": {
+  "engine": {
     "node": "*",
     "npm": "*"
   },
+  "scripts": {
+    "start": "node index.js",
+    "test": "IP=0.0.0.0 PORT=3030 mocha --timeout 5000 tests/*_test.js"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/heroku/node-js-sample"
+    "url": "http://github.com/openshift/nodejs-ex.git"
   },
-  "keywords": [
-    "node",
-    "heroku",
-    "express"
-  ],
-  "author": "_Neiht",
-  "contributors": [
-    "Tran Thien <tdthien9d@gmail.com> <Phone 0974.0973.53>"
-  ],
-  "license": "MIT"
+  "author": "_Neiht <tdthien9d@gmail.com>",
+  "license": "CC-BY-1.0",
+  "bugs": {
+    "url": "http://github.com/openshift/nodejs-ex/issues"
+  },
+  "homepage": "http://github.com/openshift/nodejs-ex"
 }
