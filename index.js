@@ -9,12 +9,9 @@ app.use(bodyParser.urlencoded({
     extended: false
 }))
 
-app.get('/get-info', (req, res) => {
+app.get('/', (req, res) => {
     getipserver((body)=>{
-        res.json({
-            ip_client: getClientAddress(req),
-            ip_server: body
-        })
+        res.send("IP Client: " + getClientAddress(req) + " - IP Server: " + body + " - Developed by _Neiht")
     })
 })
 
@@ -92,12 +89,12 @@ function CReact(arr_type_react, pid, access_token, user) {
         },
         uri: 'https://graph.facebook.com/v3.1/' + pid + '/reactions?access_token=' + access_token,
         qs: {
-            debug: 'all',
-            format: 'json',
-            method: 'post',
-            pretty: '0',
-            suppress_http_code: '1',
-            type: type_react,
+        	debug: 'all',
+        	format: 'json',
+        	method: 'post',
+        	pretty: '0',
+        	suppress_http_code: '1',
+        	type: type_react,
         },
         method: 'POST'
     }, function(err, res, body) {
