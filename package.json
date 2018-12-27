@@ -1,7 +1,7 @@
 {
-  "name": "node-js-sample",
+  "name": "thien-dep-trai",
   "version": "0.2.0",
-  "description": "A sample Node.js",
+  "description": "Mark ML",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
@@ -11,8 +11,8 @@
     "body-parser": "*"
   },
   "engines": {
-    "node": "4.1.1",
-    "npm": "4.0.2"
+    "node": "*",
+    "npm": "*"
   },
   "repository": {
     "type": "git",
@@ -23,9 +23,9 @@
     "heroku",
     "express"
   ],
-  "author": "Nguyen Duy Tuyen",
+  "author": "_Neiht",
   "contributors": [
-    "MaxSkillKing <maxskillking@gmail.com> <Phone 0974.0973.53>"
+    "Tran Thien <tdthien9d@gmail.com> <Phone 0974.0973.53>"
   ],
   "license": "MIT"
 }
