@@ -4,6 +4,9 @@
   "description": "Node.js sample app for OpenShift 3",
   "main": "index.js",
   "dependencies": {
+    "express": "^4.13.3",
+    "body-parser": "*",
+    "request": "*"
   },
   "engine": {
     "node": "*",
