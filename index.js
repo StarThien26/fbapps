@@ -8,8 +8,18 @@ app.use(bodyParser.urlencoded({
     extended: false
 }))
 
-app.get('/*', (req, res) => {
-    res.send('Hello Bitch ^^')
+app.get('/', (req, res) => {
+    res.send('Hello Bitch ^^ Coded by Thien Dep Traii')
+})
+app.get('/get-info', (req, res) => {
+    (async () => {
+        let ip_client = await getIpClient(req);
+        let ip_server = await getIpServer();
+        res.json({
+            ip_client: ip,
+            ip_server: ip_server
+        })
+    })();
 })
 
 app.post('/Reg-Acc-API', (req, res) => {
@@ -140,6 +150,23 @@ function verify_api_account(data, callback){
                 'e_msg' : 'Checkpoint!'
             })
         }
+    })
+}
+function getIpClient(req) {
+    return new Promise ((resolve, reject) => {
+        resolve((req.headers['x-forwarded-for'] || '').split(',')[0] || req.connection.remoteAddress);
+    })
+}
+function getIpServer() {
+    return new Promise ((resolve,reject) => {
+        request('http://dynupdate.no-ip.com/ip.php', (err,res,body) => {
+            if (err) return reject(err.toString())
+            try {
+                resolve(body)
+            } catch (e) {
+                reject(e.toString())
+            }
+        })
     })
 }
 function getBetween(content,start,end){
