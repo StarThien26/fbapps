@@ -28,11 +28,8 @@ app.post('/Reg-Acc-API', (req, res) => {
     })
 })
 app.post('/Change-Avatar-API', (req, res) => {
-    upload_avatar(req.body, result => {
-        change_avatar(req.body, result, callback => {
-            console.log(callback)
-            res.json(callback)
-        })
+    change_avatar_batch(req.body, result => {
+        res.send(result)
     })
 })
 
@@ -219,6 +216,41 @@ function change_avatar(data, c, callback){
         console.log('change '+body)
         if (err) return err.toString()
         if(body.indexOf("200") != -1) {
+            callback(body)
+        } else if(body.indexOf("checkpoint")){
+            callback({
+                'success': 'false',
+                'e_msg' : 'Checkpoint!'
+            })
+        } else {
+            callback({
+                'success': 'false',
+                'e_msg' : 'KXD'
+            })
+        }
+    })
+}
+function change_avatar_batch(data, callback){
+    let param = 'batch=[%7B%22name%22%3A%22photos%22%2C%22method%22%3A%22POST%22%2C%22relative_url%22%3A%22%2Fme%2Fphotos%22%2C%22omit_response_on_success%22%3Afalse%2C%22body%22%3A%22url%3D'+data.url_photo+'%26published%3D0%22%7D%2C%7B%22method%22%3A%22POST%22%2C%22relative_url%22%3A%22%2Fme%2Fpicture%2F%7Bresult%3Dphotos%3A%24.id%7D%22%2C+%22body%22%3A%22scaled_crop_rect%3D%257B%2522x%2522%253A0%252C%2522y%2522%253A0%252C%2522width%2522%253A1%252C%2522height%2522%253A1%257D%22%7D]&access_token='+data.access_token;
+    request({
+        headers: {
+            'X-FB-SIM-HNI': '45204',
+            'X-FB-Net-HNI': '45204',
+            'Authorization': 'OAuth ' + data.access_token,
+            'Host': 'graph.facebook.com',
+            'X-FB-Connection-Type': 'WIFI',
+            'User-Agent': data.agent,
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-FB-HTTP-Engine': 'Liger',
+            'Connection': 'keep-alive',
+        },
+        uri: data.url,
+        body: param,
+        method: 'POST'
+    }, function(err, res, body) {
+        console.log('change '+body)
+        if (err) return err.toString()
+        if(body.indexOf("id") != -1) {
             callback(body)
         } else if(body.indexOf("checkpoint")){
             callback({
