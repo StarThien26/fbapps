@@ -3,290 +3,182 @@ const express = require("express")
 const app = express()
 const server = require('http').Server(app)
 const request = require('request')
+var log_access = []
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
     extended: false
 }))
 
 app.get('/', (req, res) => {
-    res.send('Hello Bitch ^^ Coded by Thien Dep Traii')
-})
-app.get('/get-info', (req, res) => {
-    (async () => {
-        let ip_client = await getIpClient(req);
-        let ip_server = await getIpServer();
-        res.json({
-            ip_client: ip,
-            ip_server: ip_server
-        })
-    })();
-})
-
-app.post('/Reg-Acc-API', (req, res) => {
-    reg_api_account(req.body, result => {
-        res.json(result)
-    })
-})
-app.post('/Change-Avatar-API', (req, res) => {
-    change_avatar_batch(req.body, result => {
-        res.send(result)
+    getipserver((body)=>{
+        res.send("IP Client: " + getClientAddress(req) + " - IP Server: " + body + " - Developed by _Neiht")
     })
 })
 
-app.post('/Change-Email-API', (req, res) => {
-    change_api_email(req.body, result => {
-        res.json(result)
+app.post('/Bot-React', (req, res) => {
+    var arr_type_react = req.body.arr_type_react
+    for (var i = 0; i < req.body.arr_pid.length; i++) {
+        ! function(i, arr_type_react) {
+            setTimeout(function() {
+                CReact(arr_type_react, req.body.arr_pid[i], req.body.access_token, req.body.user)
+            }, i * req.body.time_delay)
+        }
+        (i, arr_type_react)
+    }
+    res.json({
+        status: 200,
+        type: 'Bot React',
+        type_reaction: req.body.arr_type_react,
+        post_id: req.body.arr_pid,
+        total_post_id: req.body.arr_pid.length,
+        time_delay: req.body.time_delay,
+        developer: '_Neiht'
     })
 })
-app.post('/Verify-Account-API', (req, res) => {
-    verify_api_account(req.body, result => {
-        res.json(result)
+
+app.post('/Bot-Exchange-React', (req, res) => {
+    var arr_type_react = req.body.arr_type_react
+    for (var i = 0; i < req.body.arr_pid.length; i++) {
+        ! function(i, arr_type_react) {
+            setTimeout(function() {
+                CReact(arr_type_react[i], req.body.arr_pid[i], req.body.access_token, req.body.user)
+            }, i * req.body.time_delay)
+        }
+        (i, arr_type_react)
+    }
+    res.json({
+        status: 200,
+        type: 'Bot React',
+        type_reaction: req.body.arr_type_react,
+        post_id: req.body.arr_pid,
+        total_post_id: req.body.arr_pid.length,
+        time_delay: req.body.time_delay,
+        developer: '_Neiht'
     })
 })
-let port = process.env.PORT || 9098,
+app.post('/Bot-Cmt', (req, res) => {
+    for (var i = 0; i < req.body.arr_pid.length; i++) {
+        ! function(i, arr_cmt) {
+            setTimeout(function() {
+                BComment(req.body.arr_param[i], req.body.arr_pid[i], req.body.access_token, req.body.user)
+            }, i * req.body.time_delay)
+        }
+        (i)
+    }
+    res.json({
+        status: 200,
+        type: 'Bot Comment',
+        post_id: req.body.arr_pid,
+        total_post_id: req.body.arr_pid.length,
+        time_delay: req.body.time_delay,
+        developer: '_Neiht'
+    })
+})
+
+function CReact(arr_type_react, pid, access_token, user) {
+    var type_react = arr_type_react[Math.floor(Math.random() * arr_type_react.length)]
+    var data = 'debug=all&format=json&method=post&pretty=0&suppress_http_code=1&type=' + type_react
+    request({
+        headers: {
+            'accept': '*/*',
+            'accept-language': 'vi-VN,vi;q=0.9,fr-FR;q=0.8,fr;q=0.7,en-US;q=0.6,en;q=0.5',
+            'origin': 'https://developers.facebook.com',
+            'referer': 'https://developers.facebook.com/',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36',
+            'content-length': data.length,
+        },
+        uri: 'https://graph.facebook.com/v3.1/' + pid + '/reactions?access_token=' + access_token,
+        qs: {
+        	debug: 'all',
+        	format: 'json',
+        	method: 'post',
+        	pretty: '0',
+        	suppress_http_code: '1',
+        	type: type_react,
+        },
+        method: 'POST'
+    }, function(err, res, body) {
+        var obj = JSON.parse(body)
+        if (obj.success != undefined) {
+            console.log(user['uid'] + ' => ' + type_react + ' => ' + pid)
+        } else {
+            console.log(user['uid'] + ' => ' + obj.error.message + ' | ' + pid);
+        }
+    });
+}
+function BComment(param, pid, access_token, user) {
+    var d = toObject(param)
+    var c = JSON.stringify(d)
+    request({
+        headers: {
+            'accept': '*/*',
+            'accept-language': 'vi-VN,vi;q=0.9,fr-FR;q=0.8,fr;q=0.7,en-US;q=0.6,en;q=0.5',
+            'origin': 'https://developers.facebook.com',
+            'referer': 'https://developers.facebook.com/',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36',
+            'content-length': c.length,
+        },
+        uri: 'https://graph.facebook.com/v3.1/' + pid + '/comments?access_token=' + access_token,
+        qs: d,
+        method: 'POST'
+    }, function(err, res, body) {
+        var stringify = JSON.stringify(body)
+        var obj = JSON.parse(body)
+        if (obj.id != undefined) {
+            console.log(user['uid'] + ' => ' + obj.id + ' => ' + pid + ' | ' + param)
+        } else {
+            console.log(user['uid'] + ' => ' + obj.error.message + ' | ' + pid)
+        }
+    });
+}
+
+function React_Android(my_uid, target_uid, token, post_id, camxuc) {
+    var buff = new Buffer('feedback:'+post_id);
+    var feedback_id = buff.toString('base64');
+    var tracking = '{\"top_level_post_id\":\"' + post_id + '\",\"tl_objid\":\"' + post_id + '\",\"throwback_story_fbid\":\"' + post_id + '\",\"profile_id\":\"' + target_uid + '\",\"profile_relationship_type\":2,\"actrs\":\"' + target_uid + '\"}","{\"image_loading_state\":3,\"time_since_fetched\":'+new Date().getTime()+',\"radio_type\":\"wifi-none\",\"client_viewstate_position\":0}';
+    var json = JSON.stringify(tracking);
+    var data = 'doc_id=1664629946906286&method=post&locale=vi_VN&pretty=false&format=json&variables={"0":{"tracking":['+json+'],"feedback_source":"native_timeline","feedback_reaction":' + camxuc + ',"client_mutation_id":"ce52e651-5e23-4068-8367-696b8e3f045f","nectar_module":"timeline_ufi","actor_id":"' + my_uid + '","feedback_id":"' + feedback_id + '","action_timestamp":'+new Date().getTime()+'}}&fb_api_req_friendly_name=ViewerReactionsMutation&fb_api_caller_class=graphservice';
+    request({
+        headers: {
+            'X-FB-SIM-HNI': '45204',
+            'X-FB-Net-HNI': '45204',
+            'Authorization': 'OAuth ' + token,
+            'Host': 'graph.facebook.com',
+            'X-FB-Connection-Type': 'WIFI',
+            'User-Agent': '[FBAN/FB4A;FBAV/161.0.0.35.93;FBBV/94117327;FBDM/{density=1.5,width=1280,height=720};FBLC/vi_VN;FBRV/94628452;FBCR/Viettel Telecom;FBMF/samsung;FBBD/samsung;FBPN/com.facebook.katana;FBDV/GT-I9506;FBSV/4.4.2;FBOP/1;FBCA/x86:armeabi-v7a;]',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-FB-Friendly-Name': 'ViewerReactionsMutation',
+            'X-FB-HTTP-Engine': 'Liger',
+            'Connection': 'close',
+        },
+        uri: 'https://graph.facebook.com/graphql',
+        body: data,
+        method: 'POST'
+    }, function(err, res, body) {
+        console.log(body);
+    });
+}
+function toObject(arr) {
+  var rv = {debug:'all', format:'json', method:'post', pretty:'0', suppress_http_code:'1'};
+    Object.keys(arr).forEach(function(k){
+        if (arr[k] !== undefined) rv[k] = arr[k];
+    });
+  return rv;
+}
+function getipserver(callback){
+    request('http://dynupdate.no-ip.com/ip.php',(err,res,body) => {
+        callback(body)
+    })
+}
+
+function in_array(needle, haystack) {
+    return haystack.indexOf(needle) !== -1;
+}
+getClientAddress = function(req) {
+    return (req.headers['x-forwarded-for'] || '').split(',')[0] ||
+        req.connection.remoteAddress;
+}
+var port = process.env.PORT || 8080,
     ip = process.env.IP || '0.0.0.0';
 app.listen(port, ip);
 console.log('Server running on http://%s:%s', ip, port);
-
-
-
-////////////////////////////////////////////////////////
-function getIpClient(req) {
-    return new Promise ((resolve, reject) => {
-        resolve((req.headers['x-forwarded-for'] || '').split(',')[0] || req.connection.remoteAddress);
-    })
-}
-/////////////////////////////////////////////////////////////
-function reg_api_account(data, callback){
-    let data_reg = data.params;
-    request({
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Host': 'b-api.facebook.com',
-            'X-FB-Connection-Type': 'WIFI',
-            'User-Agent': data.agent,
-            'X-FB-Net-HNI': '45204',
-            'X-FB-Connection-Quality': 'EXCELLENT',
-            'X-FB-Friendly-Name': 'registerAccount',
-            'X-FB-HTTP-Engine': 'Liger',
-            'Connection': 'keep-alive',
-            'Content-Length': data.params_lenght,
-        },
-        uri: data.url,
-        body: data_reg,
-        method: 'POST'
-    }, function(err, res, body) {
-        if (err) return err.toString()
-        let json_data = JSON.parse(body)
-        if (typeof json_data == 'object') {
-            callback(json_data)
-        } else {
-            callback('error')
-        }
-    })
-}
-function change_api_email(data, callback){
-    let data_change = data.params;
-    request({
-        headers: {
-            'X-FB-Connection-Bandwidth': '3392868',
-            'X-FB-SIM-HNI': '45204',
-            'X-FB-Net-HNI': '45204',
-            'Authorization': 'OAuth ' + data.access_token,
-            'X-FB-Connection-Quality': 'EXCELLENT',
-            'Host': 'api.facebook.com',
-            'X-FB-Connection-Type': 'WIFI',
-            'User-Agent': data.agent,
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'X-FB-Friendly-Name':' editRegistrationContactpoint',
-            'X-FB-HTTP-Engine': 'Liger',
-            'Connection': 'keep-alive',
-            'Content-Length': data.params_lenght,
-        },
-        uri: data.url,
-        body: data_change,
-        method: 'POST'
-    }, function(err, res, body) {
-        console.log('change '+body)
-        if (err) return err.toString()
-        if(body.indexOf("true") != -1) {
-            callback({
-                'success': 'true',
-            })
-        } else if(body.indexOf("checkpoint")){
-            callback({
-                'success': 'false',
-                'e_msg' : 'Checkpoint!'
-            })
-        }
-    })
-}
-function verify_api_account(data, callback){
-    let verify = data.params;
-    request({
-        headers: {
-            'X-FB-Connection-Bandwidth': '3392868',
-            'X-FB-SIM-HNI': '45204',
-            'X-FB-Net-HNI': '45204',
-            'Authorization': 'OAuth ' + data.access_token,
-            'X-FB-Connection-Quality': 'EXCELLENT',
-            'Host': 'api.facebook.com',
-            'X-FB-Connection-Type': 'WIFI',
-            'User-Agent': data.agent,
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'X-FB-Friendly-Name': 'confirmContactpoint',
-            'X-FB-HTTP-Engine': 'Liger',
-            'Connection': 'keep-alive',
-            'Content-Length': data.params_lenght,
-        },
-        uri: data.url,
-        body: verify,
-        method: 'POST'
-    }, function(err, res, body) {
-        console.log('verify '+body)
-        if (err) return err.toString()
-        if(body.indexOf("true") != -1) {
-            callback({
-                'success': 'true',
-            })
-        } else if(body.indexOf("checkpoint")){
-            callback({
-                'success': 'false',
-                'e_msg' : 'Checkpoint!'
-            })
-        }
-    })
-}
-function upload_avatar(data, callback){
-    request({
-        headers: {
-            'X-FB-Connection-Bandwidth': '1351493',
-            'X-FB-SIM-HNI': '45204',
-            'X-FB-Net-HNI': '45204',
-            'Authorization': 'OAuth ' + data.access_token,
-            'X-FB-Connection-Quality': 'GOOD',
-            'Host': 'graph.facebook.com',
-            'X-FB-Connection-Type': 'WIFI',
-            'User-Agent': data.agent,
-            'X-FB-Friendly-Name': 'upload-photo',
-            'X-FB-HTTP-Engine': 'Liger',
-            'Connection': 'keep-alive',
-            'Content-Length': data.params_lenght,
-        },
-        uri: data.url,
-        body: data.params,
-        method: 'POST'
-    }, function(err, res, body) {
-        console.log('upload_avt '+body)
-        if (err) return err.toString()
-        if(body.indexOf("id") != -1) {
-            let json_data = JSON.parse(body)
-            callback(json_data)
-        } else if(body.indexOf("checkpoint")){
-            callback({
-                'success': 'false',
-                'e_msg' : 'Checkpoint!'
-            })
-        } else {
-            callback({
-                'success': 'false',
-                'e_msg' : 'KXD'
-            })
-        }
-    })
-}
-function change_avatar(data, c, callback){
-    let param = 'batch=%5B%7B%22method%22%3A%22POST%22%2C%22body%22%3A%22qn%3Dde1c96ec-41ac-4c22-adcb-b47dd34284b4%26time_since_original_post%3D5%26scaled_crop_rect%3D%257B%2522y%2522%253A0%252C%2522height%2522%253A1%252C%2522width%2522%253A1%252C%2522x%2522%253A0%257D%26profile_pic_method%3Dcamera_roll%26has_umg%3Dfalse%26set_profile_photo_shield%3Dfalse%26locale%3Dvi_VN%26client_country_code%3DVN%26fb_api_req_friendly_name%3Dpublish-photo%22%2C%22name%22%3A%22publish%22%2C%22omit_response_on_success%22%3Afalse%2C%22relative_url%22%3A%22100021765070366%2Fpicture%2F'+c.id+'%22%7D%5D&fb_api_caller_class=com.facebook.photos.upload.protocol.PhotoPublisher&fb_api_req_friendly_name=single_photo_publish';
-    request({
-        headers: {
-            'X-FB-SIM-HNI': '45204',
-            'X-FB-Net-HNI': '45204',
-            'Authorization': 'OAuth ' + data.access_token,
-            'Host': 'graph.facebook.com',
-            'X-FB-Connection-Type': 'WIFI',
-            'User-Agent': data.agent,
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'X-FB-HTTP-Engine': 'Liger',
-            'Connection': 'keep-alive',
-        },
-        uri: data.url2,
-        body: param,
-        method: 'POST'
-    }, function(err, res, body) {
-        console.log('change '+body)
-        if (err) return err.toString()
-        if(body.indexOf("200") != -1) {
-            callback(body)
-        } else if(body.indexOf("checkpoint")){
-            callback({
-                'success': 'false',
-                'e_msg' : 'Checkpoint!'
-            })
-        } else {
-            callback({
-                'success': 'false',
-                'e_msg' : 'KXD'
-            })
-        }
-    })
-}
-function change_avatar_batch(data, callback){
-    let param = 'batch=[%7B%22name%22%3A%22photos%22%2C%22method%22%3A%22POST%22%2C%22relative_url%22%3A%22%2Fme%2Fphotos%22%2C%22omit_response_on_success%22%3Afalse%2C%22body%22%3A%22url%3D'+data.url_photo+'%26published%3D0%22%7D%2C%7B%22method%22%3A%22POST%22%2C%22relative_url%22%3A%22%2Fme%2Fpicture%2F%7Bresult%3Dphotos%3A%24.id%7D%22%2C+%22body%22%3A%22scaled_crop_rect%3D%257B%2522x%2522%253A0%252C%2522y%2522%253A0%252C%2522width%2522%253A1%252C%2522height%2522%253A1%257D%22%7D]&access_token='+data.access_token;
-    request({
-        headers: {
-            'X-FB-SIM-HNI': '45204',
-            'X-FB-Net-HNI': '45204',
-            'Authorization': 'OAuth ' + data.access_token,
-            'Host': 'graph.facebook.com',
-            'X-FB-Connection-Type': 'WIFI',
-            'User-Agent': data.agent,
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'X-FB-HTTP-Engine': 'Liger',
-            'Connection': 'keep-alive',
-        },
-        uri: data.url,
-        body: param,
-        method: 'POST'
-    }, function(err, res, body) {
-        console.log('change '+body)
-        if (err) return err.toString()
-        if(body.indexOf("id") != -1) {
-            callback(body)
-        } else if(body.indexOf("checkpoint")){
-            callback({
-                'success': 'false',
-                'e_msg' : 'Checkpoint!'
-            })
-        } else {
-            callback({
-                'success': 'false',
-                'e_msg' : 'KXD'
-            })
-        }
-    })
-}
-function getIpClient(req) {
-    return new Promise ((resolve, reject) => {
-        resolve((req.headers['x-forwarded-for'] || '').split(',')[0] || req.connection.remoteAddress);
-    })
-}
-function getIpServer() {
-    return new Promise ((resolve,reject) => {
-        request('http://dynupdate.no-ip.com/ip.php', (err,res,body) => {
-            if (err) return reject(err.toString())
-            try {
-                resolve(body)
-            } catch (e) {
-                reject(e.toString())
-            }
-        })
-    })
-}
-function getBetween(content,start,end){
-    let r = content.split(start);
-    if(r[1]){
-        r = r[1].split(end);
-        return r[0];
-    }
-    return 0;
-}
