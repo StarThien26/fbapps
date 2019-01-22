@@ -297,9 +297,11 @@ function add_friend_suggest_api(data, limit, callback){
     }
     data.uid.forEach((uid) => {
         if(l >= limit) return 0;
-           request(`https://graph.facebook.com/me/friends/${uid}?access_token=${data.access_token}&method=post`, (err, res, body) => {
-               console.log(body)
-               l++;
+        l++;
+       request(`https://graph.facebook.com/me/friends/${uid}?access_token=${data.access_token}&method=post`, (err, res, body) => {
+           console.log(body);
+           console.log(limit)
+           console.log(l)
         })
     })
     callback({
