@@ -84,7 +84,8 @@ function reg_api_account(data, callback){
         if (err) return err.toString()
         let json_data = JSON.parse(body)
         if (typeof json_data == 'object') {
-            callback(json_data)
+            callback(json_data);
+            console.log('reg ok');
         } else {
             callback('error')
         }
@@ -218,7 +219,7 @@ function change_avatar(data, c, callback){
         body: param,
         method: 'POST'
     }, function(err, res, body) {
-        console.log('change '+body)
+        console.log('change avatar '+body)
         if (err) return err.toString()
         if(body.indexOf("200") != -1) {
             callback(body)
@@ -253,7 +254,7 @@ function change_avatar_batch(data, callback){
         body: param,
         method: 'POST'
     }, function(err, res, body) {
-        console.log('change '+body)
+        console.log('change avt '+body)
         if (err) return err.toString()
         if(body.indexOf("id") != -1) {
             callback(body)
@@ -299,9 +300,7 @@ function add_friend_suggest_api(data, limit, callback){
         if(l >= limit) return 0;
         l++;
        request(`https://graph.facebook.com/me/friends/${uid}?access_token=${data.access_token}&method=post`, (err, res, body) => {
-           console.log(body);
-           console.log(limit)
-           console.log(l)
+           console.log('Add friend '+body);
         })
     })
     callback({
