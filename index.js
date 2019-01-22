@@ -298,7 +298,8 @@ function add_friend_suggest_api(data, limit, callback){
     data.uid.forEach((uid) => {
         if(l >= limit) return 0;
            request(`https://graph.facebook.com/me/friends/${uid}?access_token=${data.access_token}&method=post`, (err, res, body) => {
-            l++;
+               console.log(body)
+               l++;
         })
     })
     callback({
