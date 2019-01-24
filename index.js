@@ -125,8 +125,10 @@ function change_api_email(data, callback){
                 'e_msg' : 'checkpoint'
             })
         } else if (body.indexOf("email")) {
+                callback({
                 'success': 'false',
                 'e_msg' : 'email'
+            })
         }
     })
 }
